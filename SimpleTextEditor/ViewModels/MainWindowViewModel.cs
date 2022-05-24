@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using SimpleTextEditor.Commands;
 using SimpleTextEditor.ViewModels.Base;
+using System;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SimpleTextEditor.ViewModels
@@ -91,6 +92,9 @@ namespace SimpleTextEditor.ViewModels
                 await writer.WriteAsync(Text).ConfigureAwait(false);
             }
         }
+
+        public ICommand ExitCommand { get; } = new RelayCommand(p => Application
+            .Current.Shutdown());
         
         #endregion
 

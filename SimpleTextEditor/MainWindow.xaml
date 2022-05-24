@@ -27,9 +27,9 @@
                 <MenuItem Header="_Save As" Command="{Binding SaveFileCommand}"/>
                 <Separator/>
             </MenuItem>
-            <MenuItem Header="_Exit"/>
-            <MenuItem Header="_Service"/>
-            <MenuItem Header="_Help" Cursor="Help"/>
+            <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
+            <MenuItem Header="_Service" IsEnabled="False"/>
+            <MenuItem Header="_Help" Cursor="Help" IsEnabled="False"/>
         </Menu>
         <ToolBarTray DockPanel.Dock="Top" Orientation="Horizontal">
             <ToolBar>
