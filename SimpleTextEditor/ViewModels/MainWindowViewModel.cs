@@ -23,7 +23,26 @@ namespace SimpleTextEditor.ViewModels
         {
             get => _filePath;
 
-            set => Set(ref _filePath, value);
+            set
+            {
+                if (Set(ref _filePath, value))
+                {
+                    ReadFileAsync(value);
+                }
+            }
+        }
+
+        private async void ReadFileAsync(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            using (StreamReader reader = File.OpenText(filePath))
+            {
+                Text = await reader.ReadToEndAsync().ConfigureAwait(true);
+            }
         }
 
         #region Команды

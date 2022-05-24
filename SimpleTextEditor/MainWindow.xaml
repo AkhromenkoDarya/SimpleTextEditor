@@ -11,12 +11,17 @@
     <Window.DataContext>
         <vms:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <vms:OpenDialog x:Key="OpenFileDialog" Title="Open a file" SelectedFileName="{Binding 
+            FilePath, Mode=OneWayToSource}"/>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Command="{Binding CreateFileCommand}"/>
                 <Separator/>
-                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Open" Command="{Binding OpenFileCommand, Source={StaticResource 
+                    OpenFileDialog}}"/>
                 <MenuItem Header="_Save"/>
                 <MenuItem Header="_Save As" Command="{Binding SaveFileAsCommand}"/>
                 <Separator/>
@@ -29,7 +34,8 @@
             <ToolBar>
                 <Button Content="New" Command="{Binding CreateFileCommand}"/>
                 <Separator/>
-                <Button Content="Open"/>
+                <Button Content="Open" Command="{Binding OpenFileCommand, Source={StaticResource 
+                    OpenFileDialog}}"/>
                 <Separator/>
                 <Button Content="Save As" Command="{Binding SaveFileAsCommand}"/>
             </ToolBar>
