@@ -22,8 +22,9 @@
                 <Separator/>
                 <MenuItem Header="_Open" Command="{Binding OpenFileCommand, Source={StaticResource 
                     OpenFileDialog}}"/>
-                <MenuItem Header="_Save"/>
-                <MenuItem Header="_Save As" Command="{Binding SaveFileAsCommand}"/>
+                <MenuItem Header="_Save" Command="{Binding SaveFileCommand}" 
+                          CommandParameter="{Binding FilePath}"/>
+                <MenuItem Header="_Save As" Command="{Binding SaveFileCommand}"/>
                 <Separator/>
             </MenuItem>
             <MenuItem Header="_Exit"/>
@@ -37,7 +38,8 @@
                 <Button Content="Open" Command="{Binding OpenFileCommand, Source={StaticResource 
                     OpenFileDialog}}"/>
                 <Separator/>
-                <Button Content="Save As" Command="{Binding SaveFileAsCommand}"/>
+                <Button Content="Save" Command="{Binding SaveFileCommand}" 
+                        CommandParameter="{Binding FilePath}"/>
             </ToolBar>
         </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom"/>

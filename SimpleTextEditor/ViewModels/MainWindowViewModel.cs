@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using Microsoft.Win32;
 using SimpleTextEditor.Commands;
 using SimpleTextEditor.ViewModels.Base;
 using System.IO;
@@ -55,20 +56,25 @@ namespace SimpleTextEditor.ViewModels
             FilePath = null;
         }
 
-        public ICommand SaveFileAsCommand { get; }
+        public ICommand SaveFileCommand { get; }
 
-        private bool CanSaveFileAsCommandExecute(object p) => !string.IsNullOrWhiteSpace(Text);
+        private bool CanSaveFileCommandExecute(object p) => !string.IsNullOrWhiteSpace(Text);
 
-        private async void OnSaveFileAsCommandExecuteAsync(object p)
+        private async void OnSaveFileCommandExecuteAsync(object p)
         {
+            if (p is string filePath)
+            {
+                return;
+            }
+
             var dialog = new SaveFileDialog
             {
                 Title = "Saving a file...",
                 Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
-                FileName = "NewTextFile",
+                FileName = string.Empty,
                 DefaultExt = "*.txt",
                 AddExtension = true,
-                InitialDirectory = FilePath,
+                InitialDirectory = Environment.CurrentDirectory,
                 RestoreDirectory = true
             };
 
@@ -77,9 +83,9 @@ namespace SimpleTextEditor.ViewModels
                 return;
             }
 
-            FilePath = dialog.FileName;
+            filePath = dialog.FileName;
 
-            using (var writer = new StreamWriter(new FileStream(FilePath, FileMode.Create, 
+            using (var writer = new StreamWriter(new FileStream(filePath, FileMode.Create,
                        FileAccess.Write)))
             {
                 await writer.WriteAsync(Text).ConfigureAwait(false);
@@ -91,8 +97,8 @@ namespace SimpleTextEditor.ViewModels
         public MainWindowViewModel()
         {
             CreateFileCommand = new RelayCommand(OnCreateFileCommandExecute);
-            SaveFileAsCommand = new RelayCommand(OnSaveFileAsCommandExecuteAsync, 
-                CanSaveFileAsCommandExecute);
+            SaveFileCommand = new RelayCommand(OnSaveFileCommandExecuteAsync, 
+                CanSaveFileCommandExecute);
         }
     }
 }
