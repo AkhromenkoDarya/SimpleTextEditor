@@ -1,5 +1,8 @@
-﻿using SimpleTextEditor.ViewModels.Base;
+﻿using Microsoft.Win32;
+using SimpleTextEditor.Commands;
+using SimpleTextEditor.ViewModels.Base;
 using System.IO;
+using System.Windows.Input;
 
 namespace SimpleTextEditor.ViewModels
 {
@@ -14,34 +17,63 @@ namespace SimpleTextEditor.ViewModels
             set => Set(ref _text, value);
         }
 
-        private string _fileName;
+        private string _filePath;
 
-        public string FileName
+        public string FilePath
         {
-            get => _fileName;
+            get => _filePath;
 
-            set
-            {
-                if (Set(ref _fileName, value))
-                {
-                    ReadFileAsync(value);
-                }
-            }
+            set => Set(ref _filePath, value);
         }
 
-        private async void ReadFileAsync(string filePath)
+        #region Команды
+
+        public ICommand CreateFileCommand { get; }
+
+        private void OnCreateFileCommandExecute(object p)
         {
             Text = string.Empty;
+            FilePath = null;
+        }
 
-            if (!File.Exists(filePath))
+        public ICommand SaveFileAsCommand { get; }
+
+        private bool CanSaveFileAsCommandExecute(object p) => !string.IsNullOrWhiteSpace(Text);
+
+        private async void OnSaveFileAsCommandExecuteAsync(object p)
+        {
+            var dialog = new SaveFileDialog
+            {
+                Title = "Saving a file...",
+                Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+                FileName = "NewTextFile",
+                DefaultExt = "*.txt",
+                AddExtension = true,
+                InitialDirectory = FilePath,
+                RestoreDirectory = true
+            };
+
+            if (dialog.ShowDialog() != true)
             {
                 return;
             }
 
-            using (StreamReader reader = File.OpenText(filePath))
+            FilePath = dialog.FileName;
+
+            using (var writer = new StreamWriter(new FileStream(FilePath, FileMode.Create, 
+                       FileAccess.Write)))
             {
-                Text = await reader.ReadToEndAsync().ConfigureAwait(true);
+                await writer.WriteAsync(Text).ConfigureAwait(false);
             }
+        }
+        
+        #endregion
+
+        public MainWindowViewModel()
+        {
+            CreateFileCommand = new RelayCommand(OnCreateFileCommandExecute);
+            SaveFileAsCommand = new RelayCommand(OnSaveFileAsCommandExecuteAsync, 
+                CanSaveFileAsCommandExecute);
         }
     }
 }

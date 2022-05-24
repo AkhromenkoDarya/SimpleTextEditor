@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vms="clr-namespace:SimpleTextEditor.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="{Binding FilePath, StringFormat='Editor - {0}', TargetNullValue='Editor', 
+            FallbackValue='Text Editor'}" 
         Width="800" Height="450">
     <Window.DataContext>
         <vms:MainWindowViewModel/>
@@ -13,24 +14,24 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New"/>
+                <MenuItem Header="_New" Command="{Binding CreateFileCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Open"/>
                 <MenuItem Header="_Save"/>
-                <MenuItem Header="_Save As"/>
+                <MenuItem Header="_Save As" Command="{Binding SaveFileAsCommand}"/>
                 <Separator/>
-                <MenuItem Header="_Exit"/>
             </MenuItem>
+            <MenuItem Header="_Exit"/>
             <MenuItem Header="_Service"/>
             <MenuItem Header="_Help" Cursor="Help"/>
         </Menu>
         <ToolBarTray DockPanel.Dock="Top" Orientation="Horizontal">
             <ToolBar>
-                <ToggleButton Content="Open"/>
+                <Button Content="New" Command="{Binding CreateFileCommand}"/>
                 <Separator/>
-                <ToggleButton Content="Save"/>
+                <Button Content="Open"/>
                 <Separator/>
-                <ToggleButton Content="Save As"/>
+                <Button Content="Save As" Command="{Binding SaveFileAsCommand}"/>
             </ToolBar>
         </ToolBarTray>
         <StatusBar DockPanel.Dock="Bottom"/>
