@@ -15,6 +15,15 @@
         <vms:OpenDialog x:Key="OpenFileDialog" Title="Open a file" SelectedFileName="{Binding 
             FilePath, Mode=OneWayToSource}"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="Q" Command="{Binding ExitCommand}"/>
+        <KeyBinding Modifiers="Control" Key="S" Command="{Binding SaveFileCommand}" 
+                    CommandParameter="{Binding FilePath}"/>
+        <KeyBinding Modifiers="Control+Shift" Key="S" Command="{Binding SaveFileCommand}"/>
+        <KeyBinding Modifiers="Control" Key="O" Command="{Binding OpenFileCommand, 
+            Source={StaticResource OpenFileDialog}}"/>
+        <KeyBinding Modifiers="Control" Key="N" Command="{Binding CreateFileCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
